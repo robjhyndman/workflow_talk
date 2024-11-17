@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+*.fdb_latexmk
+workflow_files/*
+beamerthemeMonash.sty
