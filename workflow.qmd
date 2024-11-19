@@ -27,16 +27,19 @@ library(fable)
 
 ## Example paper
 
-\placefig{0}{1.1}{height=8cm}{figs/jors.png}
+\placefig{0}{1.1}{height=8cm, width=10cm}{figs/jors.png}
 
-\begin{textblock}{9}(6.5,1.2)
-\begin{block}{}
-Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{Journal of the Operational Research Society}, in press.\\\small DOI: \href{http://doi.org/10.1080/01605682.2024.2395315}{10.1080/01605682.2024.2395315}
+\begin{textblock}{9.4}(6.2,1.1)
+\begin{block}{}\fontsize{12}{16}\sf
+\begin{tabular}{p{5cm}l@{}}
+Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{Journal of the Operational Research Society}, in press.
+& \raisebox{-3cm}{\includegraphics[width=3.6cm,height=3.6cm]{figs/qr-code}}
+\end{tabular}
 \end{block}
 \end{textblock}
-\begin{textblock}{9}(6.5,6.2)\fontsize{14}{14}\sf
+\begin{textblock}{9.4}(6.2,5.4)\fontsize{14}{14}\sf
 \begin{alertblock}{}
-\href{https://github.com/bahmanrostamitabar/forecasting_interrupted_time_series}{\faicon{github} bahmanrostamitabar/\\\hspace*{1.7ex} forecasting\_interrupted\_time\_series}
+\href{https://github.com/bahmanrostamitabar/forecasting_interrupted_time_series}{\tt\faicon{github} bahmanrostamitabar/\\\hspace*{1.7ex} \rlap{forecasting\_interrupted\_time\_series}}
 \end{alertblock}
 \end{textblock}
 
@@ -51,7 +54,7 @@ Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{
 
 ## Reproducible environments
 
-\placefig{0.3}{1.25}{height = 6.5cm}{figs/renvhex}
+\placefig{0.3}{1.25}{height = 6.5cm, width=10cm}{figs/renvhex}
 
 \begin{textblock}{9.5}(6.2, 1.3)
 \begin{itemize}\tightlist
@@ -63,12 +66,12 @@ Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{
 \end{textblock}
 
 ## Reproducible environments
-\placefig{0.3}{1.25}{height = 6.5cm}{figs/renvhex}
+\placefig{0.3}{1.25}{height = 6.5cm, width=10cm}{figs/renvhex}
 
 \begin{textblock}{9.5}(6.2, 1.3)
 \begin{itemize}\tightlist
 \item Can use packages from CRAN, Bioconductor, GitHub, Gitlab, Bitbucket, etc.
-\item \texttt{renv::init()} to initialize a new project. 
+\item \texttt{renv::init()} to initialize a new project.
 \item \texttt{renv::snapshot()} to save state of project to \texttt{renv.lock}.
 \item \texttt{renv::restore()} to restore project as saved in \texttt{renv.lock}.
 \end{itemize}
@@ -76,7 +79,7 @@ Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{
 
 ## Efficient computational pipelines
 
-\placefig{0.3}{1.25}{height = 6.5cm}{figs/targets}
+\placefig{0.3}{1.25}{height = 6.5cm, width=10cm}{figs/targets}
 
 \begin{textblock}{9.5}(6.2, 1.3)
 \begin{itemize}\tightlist
@@ -158,7 +161,7 @@ Each target runs with its own seed based on its name and the global seed from `t
 
 ## Reproducible documents
 
-\placefig{0.3}{1.25}{height = 6.5cm}{figs/quarto}
+\placefig{0.3}{1.25}{height = 6.5cm, width=10cm}{figs/quarto}
 
 \begin{textblock}{9.5}(6.2, 1.1)
 \fontsize{14}{15}\sf
@@ -227,10 +230,18 @@ list(
 ## Extensions and templates
 \fontsize{13}{17}\sf
 
-* **Quarto extensions** modify and extend functionality. 
+* **Quarto extensions** modify and extend functionality.
   * See <https://quarto.org/docs/extensions/> for a list.
   * They are stored locally, in the `_extensions` folder alongside the qmd document.
 * **Quarto templates** are extensions used to define new output formats.
   * **Journal templates** at <https://quarto.org/docs/extensions/listing-journals.html>
   * **Monash templates** at <https://github.com/quarto-monash>
 
+## More information
+\fontsize{28}{30}\sf
+
+\vspace*{3cm}
+
+\begin{alertblock}{}
+\centerline{\href{https://robjhyndman.com/workflow}{robjhyndman.com/workflow}}
+\end{alertblock}
