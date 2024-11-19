@@ -29,13 +29,15 @@ library(fable)
 
 \placefig{0}{1.1}{height=8cm}{figs/jors.png}
 
-\begin{textblock}{8}(6.75,1.2)
+\begin{textblock}{9}(6.5,1.2)
 \begin{block}{}
-Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{Journal of the Operational Research Society}, in press.\\\small DOI: 10.1080/01605682.2024.2395315
+Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{Journal of the Operational Research Society}, in press.\\\small DOI: \href{http://doi.org/10.1080/01605682.2024.2395315}{10.1080/01605682.2024.2395315}
 \end{block}
 \end{textblock}
-\begin{textblock}{10}(6.5,6.2)\fontsize{14}{14}\sf
-\faicon{github} bahmanrostamitabar/\\\hspace*{1.7ex} forecasting\_interrupted\_time\_series
+\begin{textblock}{9}(6.5,6.2)\fontsize{14}{14}\sf
+\begin{alertblock}{}
+\href{https://github.com/bahmanrostamitabar/forecasting_interrupted_time_series}{\faicon{github} bahmanrostamitabar/\\\hspace*{1.7ex} forecasting\_interrupted\_time\_series}
+\end{alertblock}
 \end{textblock}
 
 ## Tools
@@ -136,6 +138,7 @@ list(
 ```
 
 ## Useful targets commands
+\vspace*{-0.3cm}
 
 * `tar_option_set()` to set options.
 * `tar_target()` to create a target.
@@ -145,10 +148,12 @@ list(
 * `tar_load(object)` to load a target.
 * `tar_visnetwork()` to visualize the pipeline.
 
-## Random numbers
+\vspace*{0.2cm}\pause
 
-* Each target runs with its own seed based on its name and the global seed from `tar_option_set(seed = ???)`
-* So running only some targets, or running them in a different order, will not change the results.
+### Random numbers
+\vspace*{-0.15cm}
+
+Each target runs with its own seed based on its name and the global seed from `tar_option_set(seed = ???)`
 
 
 ## Reproducible documents
@@ -225,7 +230,7 @@ list(
 * **Quarto extensions** modify and extend functionality. 
   * See <https://quarto.org/docs/extensions/> for a list.
   * They are stored locally, in the `_extensions` folder alongside the qmd document.
-* **Templates** are extensions used to define new output formats.
+* **Quarto templates** are extensions used to define new output formats.
   * **Journal templates** at <https://quarto.org/docs/extensions/listing-journals.html>
   * **Monash templates** at <https://github.com/quarto-monash>
 
