@@ -2,16 +2,16 @@
 title: An efficient reproducible workflow
 author: Rob J Hyndman
 date: 2024-11-26
-toc: true
+toc: false
 titlegraphic: bg-13.png
 titlecolor: white
 format:
   presentation-beamer:
     pdf-engine: pdflatex
-include-in-header: 
+include-in-header:
   text: |
     \usepackage{fontawesome}
-execute: 
+execute:
   echo: true
 ---
 
@@ -24,7 +24,6 @@ library(dplyr)
 library(tsibble)
 library(fable)
 ```
-
 
 ## Example paper
 
@@ -39,183 +38,46 @@ Hyndman RJ, Rostami-Tabar B (2024) Forecasting interrupted time series, \textit{
 \faicon{github} bahmanrostamitabar/\\\hspace*{1.7ex} forecasting\_interrupted\_time\_series
 \end{textblock}
 
-
 ## Tools
 
 \placefig{4.5}{1.7}{width=1.8cm}{github-mark}
 \placefig{3.65}{3.3}{width=3.5cm}{github}
 \placefig{8.65}{1.7}{width=3.5cm}{Rlogo}
-\placefig{1.15}{4.8}{width=3.5cm}{quarto}
-\placefig{6.15}{4.8}{width=3.5cm}{renvhex}
-\placefig{11.15}{4.8}{width=3.5cm}{targets}
+\placefig{1.15}{4.8}{width=3.5cm}{renvhex}
+\placefig{6.15}{4.8}{width=3.5cm}{targets}
+\placefig{11.15}{4.8}{width=3.5cm}{quarto}
 
+## Reproducible environments
 
-# R code
+\placefig{0.3}{1.25}{height = 6.5cm}{figs/renvhex}
 
-## R code
-
-```{r}
-#| label: austa
-austa <- readxl::read_excel(
-  path = "data/340101.xlsx",
-  sheet = "Data1", skip = 9
-) |>
-  transmute(
-    Month = yearmonth(`Series ID`),
-    Visitors = A85375847A / 1e3
-  ) |>
-  filter(Month >= yearmonth("2000 Jan"))
-```
-
-```{r fig-austa, eval = FALSE}
-austa |>
-  ggplot(aes(x = as.Date(Month), y = Visitors)) +
-  geom_line() +
-  scale_x_date(
-    breaks = seq(as.Date("2000-01-01"), by = "5 years", l = 5),
-    labels = paste("Jan", seq(2000, 2020, by = 5)),
-    minor_breaks = seq(as.Date("2001-01-01"), by = "1 year", l = 25)
-  ) +
-  labs(x = "Month", y = "Visitors (000s)")
-```
-
-## R code
-
-```{r fig-austa, eval = TRUE, echo = FALSE}
-```
-
-## R code
-
-```{r}
-austa |>
-  as_tsibble(index = Month) |>
-  model(
-    ets = ETS(log(Visitors)),
-    arima = ARIMA(log(Visitors))
-  ) |>
-  forecast(h = 12)
-```
-
-    
-
-# Reproducible documents: quarto
-
-## Reproducible documents: quarto
-\fontsize{14}{16}\sf
-
-* Generalization of Rmarkdown (not dependent on R)
-* Supports R, Python, Javascript and Julia chunks by using either `knitr`, `jupyter` or `ObservableJS` engines.
-* More consistent yaml header and chunk options.
-* Many more output formats, and many more options for customizing format.
-* Heavier reliance on pandoc Lua filters
-* Uses pandoc templates for extensions
-
-\centerline{\includegraphics[width = 10cm]{figs/qmd.png}}
-
-## Choose your engine
-
-Specify the engine in the yaml header:
-
-````{verbatim}
----
-engine: knitr
----
-````
-
-````{verbatim}
----
-engine: jupyter
-jupyter: python3
----
-````
-
-
-**Default:** If any `{r}` blocks found, use `knitr` engine; otherwise use `jupyter` (with kernel determined by first block).
-
-
-## Chunk options
-
-Rmarkdown syntax recognized for R chunks.
-
-More consistent chunk options use the hash-pipe `#|`
-
-````{verbatim}
-```{r}
-#| label: fig-chunklabel
-#| fig-caption: My figure
-#| fig-width: 6
-#| fig-height: 4
-mtcars |>
-  ggplot(aes(x = mpg, y = wt)) +
-  geom_point()
-```
-````
-
-Reference the figure using `@fig-chunklabel`.
-
-
-## Extensions and templates
-\fontsize{13}{17}\sf
-
-* quarto extensions modify and extend functionality.
-* They are stored locally, in the `_extensions` folder alongside the qmd document.
-* See <https://quarto.org/docs/extensions/> for a list.
-* Templates are extensions used to define new output formats.
-* Journal templates at\newline <https://quarto.org/docs/extensions/listing-journals.html>
-* Monash templates at\newline <https://robjhyndman.com/hyndsight/quarto_templates.html>
-
-
-# Reproducible environments: renv
-
-## Reproducible environments: renv
-
-* To ensure that your code runs the same way on different machines and at different times, you need the computing environment to be the same.
-  1. Operating system
-  2. System components
-  3. R version
-  4. R packages
-
-* Solutions for 1--4: Docker, Singularity, `containerit`, `rang`
-* Solutions for 4: `packrat`, `checkpoint`, `renv`
-
-## renv package
-
-![](figs/renv.png)
-
-## renv package
-
-* `renv::init()` : initialize a new project with a new environment. Adds:
-  *  `renv/library` contains all packages used in project
-  *  `renv.lock` contains metadata about packages used in project
-  *  `.Rprofile` run every time R starts.
-
-* `renv::snapshot()` : save the state of the project to `renv.lock`.
-
-* `renv::restore()` : restore the project to the state saved in `renv.lock`.
-
-## renv package
-\fontsize{14}{16}\sf
-
-* renv uses a package cache so you are not repeatedly installing the same packages in multiple projects.
-* `renv::install()` can install from CRAN, Bioconductor, GitHub, Gitlab, Bitbucket, etc.
-* `renv::update()` gets latest versions of all dependencies from wherever they were installed from.
-* Only R packages are supported, not system dependencies, and not R itself.
-* renv is not a replacement for Docker or Singularity.
-* `renv::deactivate(clean = TRUE)` will remove the renv environment.
-
-
-# Efficient computational pipelines: targets
-
-## targets: computation at scale
-
-\placefig{0.5}{1.8}{width=5cm}{figs/targets.png}
-
-\begin{textblock}{15}(0.5,8.5)
-\textcolor{gray}{\footnotesize Some images from https://wlandau.github.io/targets-tutorial}
+\begin{textblock}{9.5}(6.2, 1.3)
+\begin{itemize}\tightlist
+\item Creates project-specific R environments.
+\item Uses a package cache so you are not repeatedly installing the same packages in multiple projects.
+\item Does not ensure R itself, system dependencies or the OS are the same.
+\item Not a replacement for Docker or Apptainer.
+\end{itemize}
 \end{textblock}
 
-\begin{textblock}{10}(6, 2)
-\begin{itemize}
+## Reproducible environments
+\placefig{0.3}{1.25}{height = 6.5cm}{figs/renvhex}
+
+\begin{textblock}{9.5}(6.2, 1.3)
+\begin{itemize}\tightlist
+\item Can use packages from CRAN, Bioconductor, GitHub, Gitlab, Bitbucket, etc.
+\item \texttt{renv::init()} to initialize a new project. 
+\item \texttt{renv::snapshot()} to save state of project to \texttt{renv.lock}.
+\item \texttt{renv::restore()} to restore project as saved in \texttt{renv.lock}.
+\end{itemize}
+\end{textblock}
+
+## Efficient computational pipelines
+
+\placefig{0.3}{1.25}{height = 6.5cm}{figs/targets}
+
+\begin{textblock}{9.5}(6.2, 1.3)
+\begin{itemize}\tightlist
 \item Supports a clean, modular, function-oriented programming style.
 \item Learns how your pipeline fits together.
 \item Runs only the necessary computation.
@@ -229,10 +91,11 @@ Reference the figure using `@fig-chunklabel`.
 \only<1>{\placefig{0.5}{2}{width=13cm}{figs/workflow.png}}
 \only<2>{\placefig{0.5}{2}{width=13cm}{figs/change.png}}
 \only<3>{\placefig{0.5}{2}{width=13cm}{figs/downstream.png}}
+\only<4>{\placefig{0.5}{1.1}{width=14cm}{figs/decisions.png}}
 
-## Dilemma: short runtimes or reproducible results?
-
-\fullheight{figs/decisions.png}
+\begin{textblock}{15}(0.1,8.7)
+\textcolor{gray}{\fontsize{7}{7}\sf Image from https://wlandau.github.io/targets-tutorial}
+\end{textblock}
 
 ## Let a pipeline tool do the work
 
@@ -243,6 +106,19 @@ Reference the figure using `@fig-chunklabel`.
 
 ## Typical project structure
 
+### no_targets.R
+\vspace*{-0.26cm}
+
+```{r}
+#| eval: false
+library(tidyverse)
+library(fable)
+source("R/functions.R")
+my_data <- read_csv("data/my_data.csv")
+my_model <- model_function(my_data)
+```
+
+\pause
 
 ### _targets.R
 \vspace*{-0.26cm}
@@ -250,8 +126,8 @@ Reference the figure using `@fig-chunklabel`.
 ```{r}
 #| eval: false
 library(targets)
-tar_source() # source all files in R folder
 tar_option_set(packages = c("tidyverse", "fable"))
+tar_source() # source all files in R folder
 list(
   tar_target(my_file, "data/my_data.csv", format = "file"),
   tar_target(my_data, read_csv(my_file)),
@@ -259,26 +135,15 @@ list(
 )
 ```
 
-## Generate `_targets.R` in working directory
-
-```{r}
-#| eval: false
-library(targets)
-tar_script()
-```
-
-
 ## Useful targets commands
 
+* `tar_option_set()` to set options.
+* `tar_target()` to create a target.
+* `tar_source()` to source all files in a folder.
 * `tar_make()` to run the pipeline.
-* `tar_make(starts_with("fig"))` to run only targets starting with "fig".
 * `tar_read(object)` to read a target.
 * `tar_load(object)` to load a target.
-* `tar_load_everything()` to load all targets.
-* `tar_manifest()` to list all targets
 * `tar_visnetwork()` to visualize the pipeline.
-* `tar_destroy()` to remove all targets.
-* `tar_outdated()` to list outdated targets.
 
 ## Random numbers
 
@@ -286,14 +151,63 @@ tar_script()
 * So running only some targets, or running them in a different order, will not change the results.
 
 
+## Reproducible documents
+
+\placefig{0.3}{1.25}{height = 6.5cm}{figs/quarto}
+
+\begin{textblock}{9.5}(6.2, 1.1)
+\fontsize{14}{15}\sf
+\begin{itemize}\tightlist
+\item Generalization of Rmarkdown (not dependent on R)
+\item Supports R, Python, Javascript and Julia chunks by using either `knitr`, `jupyter` or `ObservableJS` engines.
+\item Consistent yaml header and chunk options.
+\item Many output formats, and many options for customizing format.
+\item Uses pandoc templates for extensions
+\end{itemize}
+\end{textblock}
+
+\placefig{5}{7.3}{width=10cm}{figs/qmd.png}
+
+## Chunk options
+
+### Chunk with regular R code
+
+````{verbatim}
+```{r}
+#| label: fig-chunklabel
+#| fig-caption: My figure
+mtcars |>
+  ggplot(aes(x = mpg, y = wt)) +
+  geom_point()
+```
+````
+
+\pause
+
+### Chunk with targets
+
+````{verbatim}
+```{r}
+#| label: fig-chunklabel
+#| fig-caption: My figure
+tar_read(my_plot)
+```
+````
+
+\only<3>{\begin{textblock}{6}(9,.1)
+\begin{alertblock}{}
+Reference the figure using \texttt{@fig-chunklabel}.
+\end{alertblock}
+\end{textblock}}
+
 ## targets with quarto
 
 ```{r}
 #| eval: false
 library(targets)
 library(tarchetypes)
-tar_source() # source all files in R folder
 tar_option_set(packages = c("tidyverse", "fable"))
+tar_source() # source all files in R folder
 list(
   tar_target(my_file, "data/my_data.csv", format = "file"),
   tar_target(my_data, read_csv(my_file)),
@@ -304,3 +218,14 @@ list(
 
 1. Load `tarchetypes` package for quarto support.
 2. Add a quarto target.
+
+## Extensions and templates
+\fontsize{13}{17}\sf
+
+* **Quarto extensions** modify and extend functionality. 
+  * See <https://quarto.org/docs/extensions/> for a list.
+  * They are stored locally, in the `_extensions` folder alongside the qmd document.
+* **Templates** are extensions used to define new output formats.
+  * **Journal templates** at <https://quarto.org/docs/extensions/listing-journals.html>
+  * **Monash templates** at <https://github.com/quarto-monash>
+
